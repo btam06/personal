@@ -122,3 +122,4 @@
 /home/avery/Projects/Personal/personal.site/api/obj/Debug/net10.0/ref/Personal.Api.dll
 /home/avery/Projects/Personal/personal.site/api/bin/Debug/net10.0/Autofac.dll
 /home/avery/Projects/Personal/personal.site/api/bin/Debug/net10.0/Autofac.Extensions.DependencyInjection.dll
+/home/avery/Projects/Personal/personal.site/api/obj/Debug/net10.0/Personal.Api.sourcelink.json

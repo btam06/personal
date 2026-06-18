@@ -1,15 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-//using Autofac.Extensions.DependencyInjection;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
 
 var builder    = WebApplication.CreateBuilder(args);
-var app        = builder.Build();
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
 
-//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+{
+    container.RegisterModule(new DataModule(builder.Configuration));
+});
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -17,6 +21,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.MapGet("/test", () => "Testing");
+
+app.MapControllers();
 app.UseHttpsRedirection();
 
 app.Run();
