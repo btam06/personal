@@ -1,13 +1,13 @@
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
-public class Repository<TEntity> where TEntity : class
+public class BaseRepository<TEntity> where TEntity : class
 {
     private readonly AppDbContext _db;
 
     private readonly IMapper _mapper;
 
-    public Repository(AppDbContext db, IMapper mapper)
+    public BaseRepository(AppDbContext db, IMapper mapper)
     {
         _db     = db;
         _mapper = mapper;
@@ -32,7 +32,7 @@ public class Repository<TEntity> where TEntity : class
     }
 
 
-    public async Task<Repository<TEntity>> StoreAsync(TEntity entity)
+    public async Task<BaseRepository<TEntity>> StoreAsync(TEntity entity)
     {
         await _db.SaveChangesAsync();
 
