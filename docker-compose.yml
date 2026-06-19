@@ -1,9 +1,13 @@
 services:
-  db:
-      image: postgres:16
-      environment:
-        POSTGRES_USER: app
-        POSTGRES_PASSWORD: Minty!Warren!Round19
-        POSTGRES_DB: personal
-      ports:
-       - "5432:5432"
+	db:
+		image: postgres:16
+		environment:
+			POSTGRES_USER: app
+			POSTGRES_PASSWORD: Minty!Warren!Round19
+			POSTGRES_DB: personal
+		ports:
+			- "5432:5432"
+	app:
+		build:
+		depends_on:
+			- db

@@ -1,14 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/items")]
 public class ItemController : ControllerBase
 {
-    [HttpGet]
-    public IActionResult GetAll()
+    protected readonly AppDbContext _db;
+
+    public ItemController(AppDbContext db)
     {
-        var items = new List<int> {1, 2, 3};
-        
+        _db = db;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var items = await _db.Items.ToListAsync();
+
         return Ok(items);
     }
 }

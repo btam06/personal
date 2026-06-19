@@ -21,8 +21,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.MapGet("/test", () => "Testing");
-
 app.MapControllers();
 app.UseHttpsRedirection();
 
