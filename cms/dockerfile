@@ -1,0 +1,13 @@
+FROM node:24 AS build
+WORKDIR /cms
+COPY package*.json .
+RUN npm install
+COPY . .
+EXPOSE 1337
+
+FROM build AS development
+ENTRYPOINT ["npx", "strapi", "develop"]
+
+FROM build AS production
+RUN npm run build
+ENTRYPOINT ["npx", "strapi", "start"]

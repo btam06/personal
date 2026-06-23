@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+psql -V ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+    CREATE DATABASE cms;
+    GRANT ALL PRIVILEGES ON DATABASE cms TO $POSTGRES_USER;
+EOSQL
