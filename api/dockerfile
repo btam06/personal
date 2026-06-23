@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /api
+COPY ["Personal.Api.csproj", "."]
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /api/publish
+ENTRYPOINT ["dotnet", "Personal.Api.dll"]
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+FROM build AS development
+ENTRYPOINT ["dotnet", "watch", "run", "--non-interactive"]
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS production
+WORKDIR /api
+COPY --from=build /api/publish .
+ENTRYPOINT ["dotnet", "Personal.Api.dll"]

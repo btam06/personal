@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/items")]
 public class ItemController : ControllerBase
 {
-    protected readonly Items _items;
+    protected readonly IItems _items;
 
-    public ItemController(Items items)
+    public ItemController(IItems items)
     {
         _items = items;
     }
@@ -23,6 +23,8 @@ public class ItemController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var item = await _items.GetByIdAsync(id);
+
+        Console.WriteLine("test");
 
         return Ok(item);
     }

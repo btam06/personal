@@ -3,7 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Mapster;
 
-var builder    = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
@@ -22,9 +22,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+} else {
+    app.UseHttpsRedirection();
 }
 
 app.MapControllers();
-app.UseHttpsRedirection();
 
 app.Run();
