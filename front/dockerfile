@@ -1,0 +1,13 @@
+FROM node:24 AS build
+WORKDIR /front
+COPY package*.json .
+RUN npm install
+COPY . .
+EXPOSE 5173
+
+FROM build AS development
+ENTRYPOINT [ "npm", "run", "dev"]
+
+FROM build AS production
+RUN npm run build
+
