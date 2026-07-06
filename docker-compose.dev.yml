@@ -7,4 +7,9 @@ services:
     cms:
         build:
             target: development
-    
+
+    front:
+        build:
+            target: development
+
+
