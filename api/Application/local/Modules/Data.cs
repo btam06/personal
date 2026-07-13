@@ -7,7 +7,7 @@ public class DataModule : Module
 
     public DataModule(IConfiguration config)
     {
-        _config = config;    
+        _config = config;
     }
 
     protected override void Load(ContainerBuilder builder)
@@ -16,9 +16,10 @@ public class DataModule : Module
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseNpgsql(_config.GetConnectionString("Default"))
+                .UseOpenIddict()
                 .Options;
 
             return new AppDbContext(options);
         });
-    } 
+    }
 }

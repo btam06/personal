@@ -1,20 +1,26 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /api
-COPY ["Personal.Api.csproj", "."]
-RUN dotnet restore
-COPY . .
-RUN dotnet publish -c Release -o /api/publish
-ENTRYPOINT ["dotnet", "Personal.Api.dll"]
+COPY ["Application/Personal.Api.csproj", "Application/"]
+COPY ["Tests/Tests.csproj", "Tests/"]
+RUN dotnet restore Application/Personal.Api.csproj
+RUN dotnet restore Tests/Tests.csproj
+COPY Application Application
+COPY Tests Tests
+RUN dotnet publish Application/Personal.Api.csproj -c Release -o /api/publish
+ENTRYPOINT ["dotnet", "Application/Personal.Api.dll"]
+
+FROM build AS test
+ENTRYPOINT [ "dotnet", "test" ]
 
 FROM build AS deployment
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
-ENTRYPOINT ["dotnet", "ef", "database", "update"]
+ENTRYPOINT ["dotnet", "ef", "database", "update", "--project", "Application/Personal.Api.csproj"]
 
 FROM build AS development
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
-ENTRYPOINT ["dotnet", "watch", "run", "--non-interactive"]
+ENTRYPOINT ["dotnet", "watch", "run", "--project", "Application/Personal.Api.csproj", "--non-interactive"]
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS production
 WORKDIR /api
