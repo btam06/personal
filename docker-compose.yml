@@ -57,13 +57,20 @@ services:
         build:
             context: ./front
             dockerfile: dockerfile
-        develop:
-            watch:
-                - action: sync
-                  path: ./front/src
-                  target: /front/src
         ports:
             - "5173:5173"
+        volumes:
+            - ./front/src:/front/src
+            - /front/node_modules
+
+    # -- Tests
+    test-api:
+        build:
+            context: ./api
+            dockerfile: dockerfile
+            target: test
+        depends_on:
+            - api
 
 volumes:
     postgres_data:
