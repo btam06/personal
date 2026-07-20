@@ -30,11 +30,11 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ItemDto dto)
+    public async Task<IActionResult> Create(ItemRequestDto dto)
     {
         var item = _items.Create(dto);
         await _items.StoreAsync(item);
-        
+
         return CreatedAtAction(nameof(GetById), new { id = item.Id } , item);
     }
 }

@@ -1,4 +1,4 @@
-public record ItemDto : IDto
+public record ItemRequestDto : IDto
 {
     public required string Name { get; init; }
 }
