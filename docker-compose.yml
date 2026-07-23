@@ -33,6 +33,7 @@ services:
         environment:
             ConnectionStrings__Default: "Host=db;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
             ASPNETCORE_URLS: http://0.0.0.0:5201
+            Strapi__ClientSecret: ${STRAPI_CLIENT_SECRET}
             OpenIddict:EncryptionKey: QLQEXPlbJHOv+a+WoP4sBXzcmuy5FTnLGmnN2JlY9oI=
             OpenIddict:SigningKey: xspDY4TpiC2S/CNUVDnO9kS14HtMey90PcNIYV4kQQ4=
         volumes:

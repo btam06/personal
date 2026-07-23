@@ -18,7 +18,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 });
 
 // Services
-builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddAuth(builder.Configuration, builder.Environment);
 
 // Build application
 

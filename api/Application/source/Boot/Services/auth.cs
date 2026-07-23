@@ -1,10 +1,12 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 public static class AuthServiceCollectionExtensions
 {
-    public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration config, IHostEnvironment env)
     {
         services.AddOpenIddict()
             .AddCore(options =>
@@ -15,13 +17,20 @@ public static class AuthServiceCollectionExtensions
             {
                 options.SetTokenEndpointUris("/connect/token");
                 options.AllowClientCredentialsFlow();
-                //options.AddEncryptionKey(new SymmetricSecurityKey(
-                //    Convert.FromBase64String(config["OpenIddict:EncryptionKey"]!)));
-                //options.AddSigningKey(new SymmetricSecurityKey(
-                //    Convert.FromBase64String(config["OpenIddict:SigningKey"]!)));
+                /*options.AddEncryptionKey(new SymmetricSecurityKey(
+                    Convert.FromBase64String(config["OpenIddict:EncryptionKey"]!)
+                ));
+                options.AddSigningKey(new SymmetricSecurityKey(
+                    Convert.FromBase64String(config["OpenIddict:SigningKey"]!)
+                ));*/
                 // For dev only — use certificates in production instead of raw keys:
-                // options.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
                 options.UseAspNetCore().EnableTokenEndpointPassthrough();
+
+                if (env.IsDevelopment())
+                {
+                    options.UseAspNetCore().DisableTransportSecurityRequirement();
+                    options.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
+                }
             })
             .AddValidation(options =>
             {
