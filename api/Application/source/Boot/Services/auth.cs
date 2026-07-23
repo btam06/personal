@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 public static class AuthServiceCollectionExtensions
@@ -13,10 +15,10 @@ public static class AuthServiceCollectionExtensions
             {
                 options.SetTokenEndpointUris("/connect/token");
                 options.AllowClientCredentialsFlow();
-                options.AddEncryptionKey(new SymmetricSecurityKey(
-                    Convert.FromBase64String(config["OpenIddict:EncryptionKey"]!)));
-                options.AddSigningKey(new SymmetricSecurityKey(
-                    Convert.FromBase64String(config["OpenIddict:SigningKey"]!)));
+                //options.AddEncryptionKey(new SymmetricSecurityKey(
+                //    Convert.FromBase64String(config["OpenIddict:EncryptionKey"]!)));
+                //options.AddSigningKey(new SymmetricSecurityKey(
+                //    Convert.FromBase64String(config["OpenIddict:SigningKey"]!)));
                 // For dev only — use certificates in production instead of raw keys:
                 // options.AddDevelopmentEncryptionCertificate().AddDevelopmentSigningCertificate();
                 options.UseAspNetCore().EnableTokenEndpointPassthrough();
@@ -27,6 +29,14 @@ public static class AuthServiceCollectionExtensions
                 options.UseAspNetCore();
             })
         ;
+
+        // Scopes
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("ItemsWrite", policy => policy.RequireClaim("scope", "items.write"));
+        });
+
+        services.AddHostedService<AuthHostedService>();
 
         return services;
     }
