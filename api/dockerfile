@@ -10,7 +10,7 @@ RUN dotnet publish Application/Personal.Api.csproj -c Release -o /api/publish
 ENTRYPOINT ["dotnet", "Application/Personal.Api.dll"]
 
 FROM build AS test
-ENTRYPOINT [ "dotnet", "test" ]
+ENTRYPOINT [ "dotnet", "test", "Tests/Tests.csproj" ]
 
 FROM build AS deployment
 RUN dotnet tool install --global dotnet-ef
