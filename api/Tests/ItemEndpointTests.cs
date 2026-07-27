@@ -130,10 +130,10 @@ public class ItemEndpointTests : IClassFixture<WebApplicationFactory<Program>>
         // proves: OpenIddict itself won't even issue a token for scopes the client wasn't granted
         var tokenResponse = await _client.PostAsync("/connect/token", new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            ["grant_type"] = "client_credentials",
-            ["client_id"] = "strapi-cms",
+            ["grant_type"]    = "client_credentials",
+            ["client_id"]     = "strapi-cms",
             ["client_secret"] = _clientSecret,
-            ["scope"] = "wrong.scope"
+            ["scope"]         = "wrong.scope"
         }));
 
         tokenResponse.StatusCode.Should().NotBe(HttpStatusCode.OK);
@@ -167,10 +167,10 @@ public class ItemEndpointTests : IClassFixture<WebApplicationFactory<Program>>
     {
         var tokenResponse = await _client.PostAsync("/connect/token", new FormUrlEncodedContent(new Dictionary<string, string>
         {
-            ["grant_type"] = "client_credentials",
-            ["client_id"] = "strapi-cms",
+            ["grant_type"]    = "client_credentials",
+            ["client_id"]     = "strapi-cms",
             ["client_secret"] = _clientSecret,
-            ["scope"] = scope
+            ["scope"]         = scope
         }));
 
         tokenResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -181,7 +181,7 @@ public class ItemEndpointTests : IClassFixture<WebApplicationFactory<Program>>
 
     private async Task<HttpResponseMessage> SendWithAuthAsync(HttpMethod method, string url, object? payload, string scope)
     {
-        var token = await GetAccessTokenAsync(scope);
+        var token   = await GetAccessTokenAsync(scope);
         var request = new HttpRequestMessage(method, url);
 
         if (payload is not null) {
