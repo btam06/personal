@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +22,7 @@ public class BaseRepository<TEntity> where TEntity : class
         return _db.Set<TEntity>().ToListAsync();
     }
 
-    public Task<TEntity?> GetByIdAsync(int id)
+    public Task<TEntity?> GetByIdAsync(Guid id)
     {
         return _db.FindAsync<TEntity>(id).AsTask();
     }
@@ -31,8 +35,22 @@ public class BaseRepository<TEntity> where TEntity : class
         return record;
     }
 
+    public BaseRepository<TEntity> Update(TEntity entity, IDto dto)
+    {
+        TypeAdapter.Adapt(dto, entity, dto.GetType(), typeof(TEntity));
 
-    public async Task<BaseRepository<TEntity>> StoreAsync(TEntity entity)
+        return this;
+    }
+
+    public BaseRepository<TEntity> Delete(TEntity entity)
+    {
+        _db.Remove(entity);
+
+        return this;
+    }
+
+
+    public async Task<BaseRepository<TEntity>> FlushAsync()
     {
         await _db.SaveChangesAsync();
 

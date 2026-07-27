@@ -74,7 +74,7 @@ public class ItemEndpointTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task DeleteItem_WhenOk_ItemDeleted()
     {
         var created  = await this.CreateTestAsync();
-        var response = await _client.DeleteAsync($"/api/items/{created!.Id}");
+        var response = await this.SendWithAuthAsync(HttpMethod.Delete, $"/api/items/{created!.Id}", null, "items.write");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -103,13 +103,22 @@ public class ItemEndpointTests : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task PostItem_WhenNoToken_ReturnsUnauthorized()
     {
-        var payload = new ItemRequestDto { Name = "Test" };
+        var payload = new ItemRequestDto { Name = "Test No Token" };
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/items")
         {
             Content = JsonContent.Create(payload)
         };
 
         var response = await _client.SendAsync(request);
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var posted = await response.Content.ReadFromJsonAsync<ItemResponseDto>();
+            if (posted is not null)
+            {
+                await this.DeleteTestAsync(posted);
+            }
+        }
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }

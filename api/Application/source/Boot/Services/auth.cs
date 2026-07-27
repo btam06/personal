@@ -3,11 +3,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using OpenIddict.Validation.AspNetCore;
 
 public static class AuthServiceCollectionExtensions
 {
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration config, IHostEnvironment env)
     {
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme    = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+            }
+        );
+
         services.AddOpenIddict()
             .AddCore(options =>
             {
