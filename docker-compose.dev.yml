@@ -4,9 +4,19 @@ services:
             target: development
         environment:
             ASPNETCORE_ENVIRONMENT: Development
+        volumes:
+            - ./api:/api
+            - /api/Application/obj
+            - /api/Application/bin
+
     cms:
         build:
             target: development
+        volumes:
+            - ./cms:/cms
+            - /cms/node_modules
+            - /cms/.strapi
+            - /cms/dist
 
     front:
         build:
