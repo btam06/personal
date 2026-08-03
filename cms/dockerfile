@@ -6,8 +6,9 @@ COPY . .
 EXPOSE 1337
 
 FROM build AS development
-ENTRYPOINT ["npx", "strapi", "develop"]
+ENTRYPOINT ["npm", "run", "develop", "--", "--debug"]
 
 FROM build AS production
+RUN npm prune --omit=dev
 RUN npm run build
 ENTRYPOINT ["npx", "strapi", "start"]
