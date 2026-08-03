@@ -7,6 +7,7 @@ export default (config: UserConfig) => {
   return mergeConfig(config, {
     server: {
       allowedHosts: [hostname],
+      hmr: false
     },
     resolve: {
       alias: {
