@@ -60,9 +60,6 @@ services:
             dockerfile: dockerfile
         ports:
             - "5173:5173"
-        volumes:
-            - ./front/src:/front/src
-            - /front/node_modules
 
     # -- Tests
     test-api:

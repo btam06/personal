@@ -21,6 +21,9 @@ services:
     front:
         build:
             target: development
+        volumes:
+            - ./front:/front
+            - /front/node_modules
 
     test-api:
         environment:
